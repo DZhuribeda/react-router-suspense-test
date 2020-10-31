@@ -1,3 +1,9 @@
-import { QueryCache } from 'react-query'
+import { QueryCache } from "react-query";
 
-export const queryCache = new QueryCache()
+export const queryCache = new QueryCache({
+  defaultConfig: {
+    queries: {
+      suspense: true,
+    },
+  },
+});

@@ -1,23 +1,20 @@
 import * as React from "react";
+import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import { fetchApi } from "./fetchApi";
+import { fetchRepo } from "./api";
 
 export default function Repo() {
   const { repoId, ownerId } = useParams();
-  const [repo, setRepo] = React.useState(null);
-  React.useEffect(() => {
-    setRepo(null);
-    fetchApi(`https://api.github.com/repos/${ownerId}/${repoId}`).then(setRepo);
-  }, [ownerId, repoId]);
+  const repoQuery = useQuery(["repo", ownerId, repoId], fetchRepo);
   return (
     <div>
       <Link to="/">Back</Link> <br />
-      {repo && (
+      {repoQuery.data && (
         <div>
           <ul>
-            <li>Name {repo.full_name}</li>
-            <li>Stars {repo.stargazers_count}</li>
-            <li>Watchers {repo.watchers_count}</li>
+            <li>Name {repoQuery.data.full_name}</li>
+            <li>Stars {repoQuery.data.stargazers_count}</li>
+            <li>Watchers {repoQuery.data.watchers_count}</li>
           </ul>
         </div>
       )}
